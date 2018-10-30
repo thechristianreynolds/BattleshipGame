@@ -14,10 +14,6 @@ public class BSDisplay extends JPanel {
     int clickedRow, clickedCol;
     JRadioButton vertical = new JRadioButton("Vertical");
     JRadioButton horizontal = new JRadioButton("Horizontal");
-    JButton ready = new JButton("Ready");
-    JPanel southPanel = new JPanel();
-    boolean boardWait = false;
-    int waitTime = 1;
 
     Color boardColor = Color.BLACK;
     Color shipColor = Color.RED;
@@ -63,11 +59,6 @@ public class BSDisplay extends JPanel {
         northPanel.add(vertical, SwingConstants.CENTER);
 
         this.add(northPanel, BorderLayout.NORTH);
-    }
-    
-    public void addButton(){
-        southPanel.add(ready, SwingConstants.CENTER);
-        this.add(southPanel, BorderLayout.NORTH);
     }
 
     public void processClick(MouseEvent me) {
@@ -143,15 +134,6 @@ public class BSDisplay extends JPanel {
         repaint();
     }
 
-    public void sleepTime(){
-        try{
-            TimeUnit.SECONDS.sleep(waitTime);
-            repaint();
-        } catch (InterruptedException e){
-
-        }
-    }
-
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
@@ -161,152 +143,17 @@ public class BSDisplay extends JPanel {
         boolean player2 = false;
         int boardAdjust = 2;
 
-        // if (boardWait){
-        //     boardWait = false;
-        //     for (int row = 0; row < game.getRows(); row++) {
-        //         x = xStart1;
-        //         for (int col = 0; col < game.getCols(); col++) {
-        //             g.setColor(boardColor);
-        //             g.drawRect(x, y, cellSize, cellSize);
-        //             int tokenSize = (int) (cellSize * tokenScale);
-        //             int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-        //             g.setColor(Color.white);
-        //             g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-        //             x += cellSize;
-        //         }
-        //         y += cellSize;
-        //     }
-        //     y = yStart2;
-        //     for (int row = 0; row < game.getRows(); row++) {
-        //         x = xStart2;
-        //         for (int col = 0; col < game.getCols(); col++) {
-        //             g.setColor(boardColor);
-        //             g.drawRect(x, y, cellSize, cellSize);
-        //             int tokenSize = (int) (cellSize * tokenScale);
-        //             int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-        //             g.setColor(Color.white);
-        //             g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-        //             x += cellSize;
-        //         }
-        //         y += cellSize;
-        //     }
-        //     // sleepTime();
-        //     addButton();
-        //     // try{
-        //     //     TimeUnit.SECONDS.sleep(waitTime);
-        //     //     repaint();
-        //     // } catch (InterruptedException e){
-    
-        //     // }
-        // }else{
-            // Draw the board during the Deployment phase.
-            if (game.isDeploy()){
-                // Draw the board for Player 1
-                if (game.getTurn()){
-                    for (int row = 0; row < game.getRows(); row++) {
-                        x = xStart1;
-                        for (int col = 0; col < game.getCols(); col++) {
-                            g.setColor(boardColor);
-                            g.drawRect(x, y, cellSize, cellSize);
-
-                            String cell = game.getTile(row, col, player1);
-                            if (cell.equals("o")){
-                                
-                            } else if (cell.equals("x")){
-                                int tokenSize = (int) (cellSize * tokenScale);
-                                int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                                g.setColor(hitColor);
-                                g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                            } else if(cell.equals("m")){
-                                int tokenSize = (int) (cellSize * tokenScale);
-                                int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                                g.setColor(missColor);
-                                g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                            } else{
-                                int tokenSize = (int) (cellSize * tokenScale);
-                                int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                                g.setColor(shipColor);
-                                g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                            }
-                            x += cellSize;
-                        }
-                        y += cellSize;
-                    }
-                }
-                // Draw the board for Player 2
-                else{
-                    y = yStart2;
-                    for (int row = 0; row < game.getRows(); row++) {
-                        x = xStart2;
-                        for (int col = 0; col < game.getCols(); col++) {
-                            g.setColor(boardColor);
-                            g.drawRect(x, y, cellSize, cellSize);
-
-                            String cell = game.getTile(row, col, player2);
-                            if (cell.equals("o")){
-                                
-                            } else if (cell.equals("x")){
-                                int tokenSize = (int) (cellSize * tokenScale);
-                                int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                                g.setColor(hitColor);
-                                g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                            } else if(cell.equals("m")){
-                                int tokenSize = (int) (cellSize * tokenScale);
-                                int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                                g.setColor(missColor);
-                                g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                            } else{
-                                int tokenSize = (int) (cellSize * tokenScale);
-                                int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                                g.setColor(shipColor);
-                                g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                            }
-                            x += cellSize;
-                        }
-                        y += cellSize;
-                    }
-                }
-            }
-            // Draw the board after the game is over.
-            else if (game.getGameOver()){
-                // Draw the board for Player 1
+        // Draw the board during the Deployment phase.
+        if (game.isDeploy()){
+            // Draw the board for Player 1
+            if (game.getTurn()){
                 for (int row = 0; row < game.getRows(); row++) {
                     x = xStart1;
                     for (int col = 0; col < game.getCols(); col++) {
                         g.setColor(boardColor);
                         g.drawRect(x, y, cellSize, cellSize);
+
                         String cell = game.getTile(row, col, player1);
-                        if (cell.equals("o")){
-
-                        } else if (cell.equals("x")){
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(hitColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        } else if(cell.equals("m")){
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(missColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        } else{
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(shipColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        }
-                        x += cellSize;
-                    }
-                    y += cellSize;
-                }
-                y = yStart2;
-                // Draw the board for Player 2
-                for (int row = 0; row < game.getRows(); row++) {
-                    x = xStart2;
-
-                    for (int col = 0; col < game.getCols(); col++) {
-                        g.setColor(boardColor);
-                        g.drawRect(x, y, cellSize, cellSize);
-                        String cell = game.getTile(row, col, player2);
                         if (cell.equals("o")){
                             
                         } else if (cell.equals("x")){
@@ -329,97 +176,16 @@ public class BSDisplay extends JPanel {
                     }
                     y += cellSize;
                 }
-            } 
-            // Draw the board during the Player 1 Fire phase.
-            else if (game.getTurn()){
-                boardWait = true;
-                // Draw the board for Player 1
-                for (int row = 0; row < game.getRows(); row++) {
-                    x = xStart1;
-                    for (int col = 0; col < game.getCols(); col++) {
-                        g.setColor(boardColor);
-                        g.drawRect(x, y, cellSize, cellSize);
-                        String cell = game.getTile(row, col, player1);
-                        if (cell.equals("o")){
-
-                        } else if (cell.equals("x")){
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(hitColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        } else if(cell.equals("m")){
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(missColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        } else{
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(shipColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        }
-                        x += cellSize;
-                    }
-                    y += cellSize;
-                }
+            }
+            // Draw the board for Player 2
+            else{
                 y = yStart2;
-                // Draw the board for Player 2
                 for (int row = 0; row < game.getRows(); row++) {
                     x = xStart2;
                     for (int col = 0; col < game.getCols(); col++) {
                         g.setColor(boardColor);
                         g.drawRect(x, y, cellSize, cellSize);
-                        String cell = game.getTile(row, col, player2);
-                        if (cell.equals("x")){
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(hitColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        } else if(cell.equals("m")){
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(missColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        }
-                        x += cellSize;
-                    }
-                    y += cellSize;
-                }
-            } 
-            // Draw the board during the Player 2 Fire phase.
-            else if (!game.getTurn()){
-                boardWait = true;
-                // Draw the board for Player 1
-                for (int row = 0; row < game.getRows(); row++) {
-                    x = xStart1;
 
-                    for (int col = 0; col < game.getCols(); col++) {
-                        g.setColor(boardColor);
-                        g.drawRect(x, y, cellSize, cellSize);
-                        String cell = game.getTile(row, col, player1);
-                        if (cell.equals("x")){
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(hitColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        } else if(cell.equals("m")){
-                            int tokenSize = (int) (cellSize * tokenScale);
-                            int tokenIndent = (cellSize - tokenSize) / boardAdjust;
-                            g.setColor(missColor);
-                            g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                        }
-                        x += cellSize;
-                    }
-                    y += cellSize;
-                }
-                y = yStart2;
-                // Draw the board for Player 2
-                for (int row = 0; row < game.getRows(); row++) {
-                    x = xStart2;
-
-                    for (int col = 0; col < game.getCols(); col++) {
-                        g.setColor(boardColor);
-                        g.drawRect(x, y, cellSize, cellSize);
                         String cell = game.getTile(row, col, player2);
                         if (cell.equals("o")){
                             
@@ -444,6 +210,183 @@ public class BSDisplay extends JPanel {
                     y += cellSize;
                 }
             }
-        // }
+        }
+        // Draw the board after the game is over.
+        else if (game.getGameOver()){
+            // Draw the board for Player 1
+            for (int row = 0; row < game.getRows(); row++) {
+                x = xStart1;
+                for (int col = 0; col < game.getCols(); col++) {
+                    g.setColor(boardColor);
+                    g.drawRect(x, y, cellSize, cellSize);
+                    String cell = game.getTile(row, col, player1);
+                    if (cell.equals("o")){
+
+                    } else if (cell.equals("x")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(hitColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else if(cell.equals("m")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(missColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else{
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(shipColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    }
+                    x += cellSize;
+                }
+                y += cellSize;
+            }
+            y = yStart2;
+            // Draw the board for Player 2
+            for (int row = 0; row < game.getRows(); row++) {
+                x = xStart2;
+
+                for (int col = 0; col < game.getCols(); col++) {
+                    g.setColor(boardColor);
+                    g.drawRect(x, y, cellSize, cellSize);
+                    String cell = game.getTile(row, col, player2);
+                    if (cell.equals("o")){
+                        
+                    } else if (cell.equals("x")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(hitColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else if(cell.equals("m")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(missColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else{
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(shipColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    }
+                    x += cellSize;
+                }
+                y += cellSize;
+            }
+        } 
+        // Draw the board during the Player 1 Fire phase.
+        else if (game.getTurn()){
+            boardWait = true;
+            // Draw the board for Player 1
+            for (int row = 0; row < game.getRows(); row++) {
+                x = xStart1;
+                for (int col = 0; col < game.getCols(); col++) {
+                    g.setColor(boardColor);
+                    g.drawRect(x, y, cellSize, cellSize);
+                    String cell = game.getTile(row, col, player1);
+                    if (cell.equals("o")){
+
+                    } else if (cell.equals("x")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(hitColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else if(cell.equals("m")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(missColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else{
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(shipColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    }
+                    x += cellSize;
+                }
+                y += cellSize;
+            }
+            y = yStart2;
+            // Draw the board for Player 2
+            for (int row = 0; row < game.getRows(); row++) {
+                x = xStart2;
+                for (int col = 0; col < game.getCols(); col++) {
+                    g.setColor(boardColor);
+                    g.drawRect(x, y, cellSize, cellSize);
+                    String cell = game.getTile(row, col, player2);
+                    if (cell.equals("x")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(hitColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else if(cell.equals("m")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(missColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    }
+                    x += cellSize;
+                }
+                y += cellSize;
+            }
+        } 
+        // Draw the board during the Player 2 Fire phase.
+        else if (!game.getTurn()){
+            boardWait = true;
+            // Draw the board for Player 1
+            for (int row = 0; row < game.getRows(); row++) {
+                x = xStart1;
+
+                for (int col = 0; col < game.getCols(); col++) {
+                    g.setColor(boardColor);
+                    g.drawRect(x, y, cellSize, cellSize);
+                    String cell = game.getTile(row, col, player1);
+                    if (cell.equals("x")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(hitColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else if(cell.equals("m")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(missColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    }
+                    x += cellSize;
+                }
+                y += cellSize;
+            }
+            y = yStart2;
+            // Draw the board for Player 2
+            for (int row = 0; row < game.getRows(); row++) {
+                x = xStart2;
+
+                for (int col = 0; col < game.getCols(); col++) {
+                    g.setColor(boardColor);
+                    g.drawRect(x, y, cellSize, cellSize);
+                    String cell = game.getTile(row, col, player2);
+                    if (cell.equals("o")){
+                        
+                    } else if (cell.equals("x")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(hitColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else if(cell.equals("m")){
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(missColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    } else{
+                        int tokenSize = (int) (cellSize * tokenScale);
+                        int tokenIndent = (cellSize - tokenSize) / boardAdjust;
+                        g.setColor(shipColor);
+                        g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
+                    }
+                    x += cellSize;
+                }
+                y += cellSize;
+            }
+        }
     }
 }
