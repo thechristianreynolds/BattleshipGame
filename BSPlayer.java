@@ -1,4 +1,8 @@
 import java.util.*;
+import java.io.*;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javax.swing.*;
 
 /**
@@ -87,10 +91,34 @@ public class BSPlayer {
     public void shipHit(int ship) {
         ships[ship] -= 1;
         if (ships[ship] == 0){
+            MediaPlayer mediaPlayer = playSound(true);
+            mediaPlayer.play();
             JOptionPane.showMessageDialog(null, "A ship has been sunk!", "Battleship Fire Phase",1);
             return;
         }
+        MediaPlayer mediaPlayer = playSound(false);
+        mediaPlayer.play();
         JOptionPane.showMessageDialog(null, "You hit something!", "Battleship Fire Phase",1);
+    }
+
+    public MediaPlayer playSound(boolean sink){
+        JFXPanel panel = new JFXPanel();
+        // Unique sounds for sinking a ship should be added
+        if (sink){
+            Random rand = new Random();
+            int randNum = rand.nextInt(4)+1;
+            String bip = "Sounds\\explosion" + randNum + ".mp3";
+            Media hit = new Media(new File(bip).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(hit);
+            return mediaPlayer;
+        } else {
+            Random rand = new Random();
+            int randNum = rand.nextInt(4)+1;
+            String bip = "Sounds\\explosion" + randNum + ".mp3";
+            Media hit = new Media(new File(bip).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(hit);
+            return mediaPlayer;
+        }
     }
 
     public boolean checkShips(){
