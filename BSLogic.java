@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import javax.swing.*;
 
 public class BSLogic {
 
@@ -83,14 +84,14 @@ public class BSLogic {
         if (p1Turn) {
             if (player2.checkHit(row, col)){
                 if (checkWinner()){
-                    System.err.println("\nPlayer two may now fire!");
+                    JOptionPane.showMessageDialog(null, "Player 2 may now fire!", "Battleship Deployment Phase",1);
                     p1Turn = false;
                 }
             }
         } else{
             if (player1.checkHit(row, col)){
                 if (checkWinner()){
-                    System.err.println("\nPlayer one may now fire!");
+                    JOptionPane.showMessageDialog(null, "Player 1 may now fire!", "Battleship Deployment Phase",1);
                     p1Turn = true;
                 }
             }
@@ -100,13 +101,13 @@ public class BSLogic {
     public boolean checkWinner(){
         if (p1Turn){
             if (!player2.checkShips()){
-                System.err.println("Player 2 has won!");
+                JOptionPane.showMessageDialog(null, "Player 2 has won!", "Battleship Deployment Phase",1);
                 gameOver = true;
                 return !gameOver;
             }
         } else{
             if (!player1.checkShips()){
-                System.err.println("Player 1 has won!");
+                JOptionPane.showMessageDialog(null, "Player 2 has won!", "Battleship Deployment Phase",1);
                 gameOver = true;
                 return !gameOver;
             }

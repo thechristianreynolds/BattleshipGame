@@ -1,4 +1,5 @@
 import java.util.*;
+import javax.swing.*;
 
 /**
  * BSPlayer
@@ -70,10 +71,10 @@ public class BSPlayer {
         String tile = board[row][col];
         if (tile.equals("o")) {
             board[row][col] = "m";
-            System.err.println("No ship there!");
+            JOptionPane.showMessageDialog(null, "No ship there!", "Battleship Fire Phase",1);
             return true;
         } else if (tile.equals("x") || tile.equals("m")) {
-            System.err.println("This tile has already been hit!");
+            JOptionPane.showMessageDialog(null, "This tile has already been hit!", "Battleship Fire Phase",1);
             return false;
         } else {
             int shipIndex = Integer.parseInt(tile);
@@ -84,11 +85,12 @@ public class BSPlayer {
     }
 
     public void shipHit(int ship) {
-        System.err.println("You hit something!");
         ships[ship] -= 1;
         if (ships[ship] == 0){
-            System.err.println("A ship has been sunk!");
+            JOptionPane.showMessageDialog(null, "A ship has been sunk!", "Battleship Fire Phase",1);
+            return;
         }
+        JOptionPane.showMessageDialog(null, "You hit something!", "Battleship Fire Phase",1);
     }
 
     public boolean checkShips(){
