@@ -46,13 +46,13 @@ public class BSLogic {
     /**
      * @TODO Update to load player boards
      */
-    public void initFromFile(String fName) {
+    public void initFromFile(File fName) {
         System.err.println("Loading...");
         String p1Board = "";
         String p2Board = "";
         String playerTurn = "";
         try {
-            Scanner scan = new Scanner(new File(fName));
+            Scanner scan = new Scanner(fName);
             p1Board = scan.useDelimiter("\n").next();
             p2Board = scan.useDelimiter("\n").next();
             playerTurn = scan.useDelimiter("\n").next();
