@@ -136,20 +136,40 @@ public class BSDisplay extends JPanel {
         int code = ke.getKeyCode();
         System.err.print("\n Key Pressed " + code);
 
-        switch (code) {
-        case KeyEvent.VK_S:
-            clickedCol--;
-            System.err.print("  save to file ");
-            game.saveToFile("TrialGame.dat");
-            return;
-        case KeyEvent.VK_R:
-            clickedCol--;
-            System.err.print("  retrieve from file ");
-            game.initFromFile("TrialGame.dat");
-            repaint();
-            return;
-        }
-        repaint();
+        // switch (code) {
+        // case KeyEvent.VK_S:
+        //     if (game.isDeploy()){
+        //         JOptionPane.showMessageDialog(null, "All player must deploy ships before saving.", "Save Error",0);
+        //     } else {
+        //         clickedCol--;
+        //         System.err.print("  save to file ");
+        //         game.saveToFile("save.txt");
+        //         return;
+        //     }
+        // case KeyEvent.VK_R:
+        //     blankDraw = true;
+        //     if (shipsDeployed >= 6){
+        //         repaint();
+        //         clickedCol--;
+        //         System.err.print("  retrieve from file ");
+        //         game.initFromFile("save.txt");
+        //         repaint();
+        //         return;
+        //     } else {
+        //         repaint();
+        //         shipsDeployed = 7;
+        //         clickedCol--;
+        //         System.err.print("  retrieve from file ");
+        //         game.initFromFile("save.txt");
+        //         repaint();
+        //         return;
+        //     }
+        // }
+        // repaint();
+    }
+
+    public void setBlankDraw(boolean bool){
+        blankDraw = bool;
     }
 
     public void paintComponent(Graphics g) {

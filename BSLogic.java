@@ -158,6 +158,14 @@ public class BSLogic {
         }
     }
 
+    public void setDeploy(boolean deploy){
+        deployPhase = deploy;
+    }
+
+    public void setShipsDeploy(int ships){
+        shipsDeployed = ships;
+    }
+
     public void setTurn(boolean turn) {
         p1Turn = turn;
     }

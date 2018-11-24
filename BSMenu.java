@@ -15,14 +15,26 @@ public class BSMenu extends JMenuBar{
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                window.game.saveToFile("save.txt");
+                if (window.game.isDeploy()){
+                    JOptionPane.showMessageDialog(null, "All player must deploy ships before saving.", "Save Error",0);
+                } else {
+                    window.game.saveToFile("save.txt");
+                }
             }
         });
 
         load.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int shipMax = 6;
+                window.display.setBlankDraw(true);
+                window.repaint();
+                if (window.game.isDeploy()){
+                    window.game.setDeploy(false);
+                    window.game.setShipsDeploy(shipMax);
+                }
                 window.game.initFromFile("save.txt");
+                window.repaint();
             }
         });
     }

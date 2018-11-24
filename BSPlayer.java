@@ -133,13 +133,30 @@ public class BSPlayer {
 
     public void setBoard(String saveBoard){
         int x = 0;
+        int ship0 = 0;
+        int ship1 = 0;
+        int ship2 = 0;
         for(int j = 0; j < board.length; j++){
             for(int k = 0; k < 10; k++){
+                if (saveBoard.charAt(x) == '0'){
+                    ship0 += 1;
+                } else if (saveBoard.charAt(x) == '1'){
+                    ship1 += 1;
+                } else if (saveBoard.charAt(x) == '2'){
+                    ship2 += 1;
+                }
                 board[j][k] = Character.toString(saveBoard.charAt(x));
                 x++;
             }
         }
+        loadShips(ship0, ship1, ship2);
     }
+
+    public void loadShips(int ship0, int ship1, int ship2){
+        ships[0] = ship0;
+        ships[1] = ship1;
+        ships[2] = ship2;
+    }    
 
     @Override
     public String toString() {
