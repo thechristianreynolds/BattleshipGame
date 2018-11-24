@@ -107,14 +107,14 @@ public class BSPlayer {
         if (sink){
             Random rand = new Random();
             int randNum = rand.nextInt(4)+1;
-            String bip = "Sounds\\explosion" + randNum + ".mp3";
+            String bip = "Sounds/explosion" + randNum + ".mp3";
             Media hit = new Media(new File(bip).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(hit);
             return mediaPlayer;
         } else {
             Random rand = new Random();
             int randNum = rand.nextInt(4)+1;
-            String bip = "Sounds\\explosion" + randNum + ".mp3";
+            String bip = "Sounds/explosion" + randNum + ".mp3";
             Media hit = new Media(new File(bip).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(hit);
             return mediaPlayer;
