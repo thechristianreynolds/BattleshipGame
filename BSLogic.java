@@ -27,16 +27,18 @@ public class BSLogic {
      * @TODO Update to save player boards
      */
     public void saveToFile(String fName) {
-        try(Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(fName), "UTF-8"))){
+        System.err.println("Saving...");
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fName), "UTF-8"))) {
             writer.write(player1.toString());
+            writer.write("\n");
             writer.write(player2.toString());
-            if(p1Turn){
+            writer.write("\n");
+            if (p1Turn) {
                 writer.write("1");
             } else {
                 writer.write("0");
             }
-        } catch (IOException ex){
+        } catch (IOException ex) {
 
         }
     }
@@ -45,37 +47,45 @@ public class BSLogic {
      * @TODO Update to load player boards
      */
     public void initFromFile(String fName) {
-        String loadBoard = "";
+        System.err.println("Loading...");
+        String p1Board = "";
+        String p2Board = "";
+        String playerTurn = "";
         try {
-            loadBoard = new Scanner(new File(fName)).useDelimiter("\\Z").next();
-        } catch(IOException e) {
+            Scanner scan = new Scanner(new File(fName));
+            p1Board = scan.useDelimiter("\n").next();
+            p2Board = scan.useDelimiter("\n").next();
+            playerTurn = scan.useDelimiter("\n").next();
+        } catch (IOException e) {
 
         }
 
-        player1.setBoard(loadBoard, 1);
-        player2.setBoard(loadBoard, 2);
+        player1.setBoard(p1Board);
+        player2.setBoard(p2Board);
 
-        if(player1.setBoard(loadBoard, 1)){
+        if (playerTurn == "1") {
             p1Turn = true;
+            JOptionPane.showMessageDialog(null, "Player 1 may now fire!", "Successful Load",1);
         } else {
             p1Turn = false;
+            JOptionPane.showMessageDialog(null, "Player 2 may now fire!", "Successful Load",1);
         }
-    }
+      }
 
     public void deployShip(int row, int col, boolean vert) {
         if (deploymentOnBoard(row, col, vert)) {
             if (shipsDeployed < ships) {
-                if (player1.deployShips(row, col, vert)){
+                if (player1.deployShips(row, col, vert)) {
                     shipsDeployed++;
                     System.err.println("Player one ship deployed at: " + row + ", " + col);
-                } else{
+                } else {
                     System.err.println("A ship is already there!");
                 }
             } else if (shipsDeployed < (ships * 2)) {
-                if (player2.deployShips(row, col, vert)){
+                if (player2.deployShips(row, col, vert)) {
                     shipsDeployed++;
                     System.err.println("Player two ship deployed at: " + row + ", " + col);
-                } else{
+                } else {
                     System.err.println("A ship is already there!");
                 }
             }
@@ -107,15 +117,15 @@ public class BSLogic {
 
     public void fireRound(int row, int col) {
         if (p1Turn) {
-            if (player2.checkHit(row, col)){
-                if (checkWinner()){
+            if (player2.checkHit(row, col)) {
+                if (checkWinner()) {
                     JOptionPane.showMessageDialog(null, "Player 2 may now fire!", "Battleship Deployment Phase",1);
                     p1Turn = false;
                 }
             }
-        } else{
-            if (player1.checkHit(row, col)){
-                if (checkWinner()){
+        } else {
+            if (player1.checkHit(row, col)) {
+                if (checkWinner()) {
                     JOptionPane.showMessageDialog(null, "Player 1 may now fire!", "Battleship Deployment Phase",1);
                     p1Turn = true;
                 }
@@ -123,15 +133,15 @@ public class BSLogic {
         }
     }
 
-    public boolean checkWinner(){
-        if (p1Turn){
-            if (!player2.checkShips()){
+    public boolean checkWinner() {
+        if (p1Turn) {
+            if (!player2.checkShips()) {
                 JOptionPane.showMessageDialog(null, "Player 2 has won!", "Battleship Deployment Phase",1);
                 gameOver = true;
                 return !gameOver;
             }
-        } else{
-            if (!player1.checkShips()){
+        } else {
+            if (!player1.checkShips()) {
                 JOptionPane.showMessageDialog(null, "Player 2 has won!", "Battleship Deployment Phase",1);
                 gameOver = true;
                 return !gameOver;
@@ -172,7 +182,7 @@ public class BSLogic {
         return ships;
     }
 
-    public boolean getGameOver(){
+    public boolean getGameOver() {
         return gameOver;
     }
 }
