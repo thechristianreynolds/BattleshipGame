@@ -27,14 +27,39 @@ public class BSLogic {
      * @TODO Update to save player boards
      */
     public void saveToFile(String fName) {
+        try(Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(fName), "UTF-8"))){
+            writer.write(player1.toString());
+            writer.write(player2.toString());
+            if(p1Turn){
+                writer.write("1");
+            } else {
+                writer.write("0");
+            }
+        } catch (IOException ex){
 
+        }
     }
 
     /**
      * @TODO Update to load player boards
      */
     public void initFromFile(String fName) {
+        String loadBoard = "";
+        try {
+            loadBoard = new Scanner(new File(fName)).useDelimiter("\\Z").next();
+        } catch(IOException e) {
 
+        }
+
+        player1.setBoard(loadBoard, 1);
+        player2.setBoard(loadBoard, 2);
+
+        if(player1.setBoard(loadBoard, 1)){
+            p1Turn = true;
+        } else {
+            p1Turn = false;
+        }
     }
 
     public void deployShip(int row, int col, boolean vert) {

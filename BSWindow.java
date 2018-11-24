@@ -10,6 +10,8 @@ public class BSWindow extends JFrame {
     int cellAcross = 10;
     int cellDown = 10;
 
+    BSMenu menuBar = new BSMenu(this);
+
     public BSWindow() {
         this.setTitle("Battleship!");
         this.setSize(winWidth, winHeight);
@@ -19,6 +21,8 @@ public class BSWindow extends JFrame {
         game = new BSLogic(cellDown, cellAcross);
         display = new BSDisplay(game);
         this.add(display, BorderLayout.CENTER);
+
+        this.setJMenuBar(menuBar);
         
         this.setVisible(true);
     }

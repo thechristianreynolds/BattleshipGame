@@ -130,4 +130,41 @@ public class BSPlayer {
         }
         return shipsLeft;
     }
+
+    public Boolean setBoard(String saveBoard, int player){
+        if(player == 1){
+            int x = 0;
+            for(int j = 0; j < board.length; j++){
+                for(int k = 0; k < 10; k++){
+                    board[j][k] = Character.toString(saveBoard.charAt(x));
+                    x++;
+                }
+            }
+        } else {
+            int x = 100;
+            for(int j = 0; j < board.length; j++){
+                for(int k = 0; k < 10; k++){
+                    board[j][k] = Character.toString(saveBoard.charAt(x));
+                    x++;
+                }
+            }
+        }
+
+        if(Character.toString(saveBoard.charAt(200)) == "1"){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        String string = "";
+        for(int i = 0; i < board.length; i ++){
+            for(int j = 0; j < 10; j++){
+                string += board[i][j];
+            }
+        }
+        return string;
+    }
 }
