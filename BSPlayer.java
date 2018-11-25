@@ -23,7 +23,7 @@ public class BSPlayer {
             Arrays.fill(row, "o");
         }
     }
-    
+
     public boolean deployShips(int row, int col, boolean vert) {
         int[][] tileSet = convShipTiles(row, col, shipHP, vert);
         if (!shipAlreadyThere(tileSet)) {
@@ -32,11 +32,11 @@ public class BSPlayer {
             }
             ships[shipsDeployed] = shipHP;
             shipsDeployed++;
-            if (shipsDeployed != 2){
+            if (shipsDeployed != 2) {
                 shipHP++;
             }
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -45,11 +45,11 @@ public class BSPlayer {
         if (vert) {
             int[] tile1 = new int[] { row + 1, col };
             int[] tile2 = new int[] { row, col };
-            if (shipSize >= 3){
+            if (shipSize >= 3) {
                 int[] tile3 = new int[] { row - 1, col };
-                if (shipSize >= 4){
+                if (shipSize >= 4) {
                     int[] tile4 = new int[] { row + 2, col };
-                    if (shipSize >= 5){
+                    if (shipSize >= 5) {
                         int[] tile5 = new int[] { row - 2, col };
                         int[][] tileSet = new int[][] { tile1, tile2, tile3, tile4, tile5 };
                         return tileSet;
@@ -57,7 +57,7 @@ public class BSPlayer {
                         int[][] tileSet = new int[][] { tile1, tile2, tile3, tile4 };
                         return tileSet;
                     }
-                } else{
+                } else {
                     int[][] tileSet = new int[][] { tile1, tile2, tile3 };
                     return tileSet;
                 }
@@ -68,11 +68,11 @@ public class BSPlayer {
         } else {
             int[] tile1 = new int[] { row, col + 1 };
             int[] tile2 = new int[] { row, col };
-            if (shipSize >= 3){
+            if (shipSize >= 3) {
                 int[] tile3 = new int[] { row, col - 1 };
-                if (shipSize >= 4){
+                if (shipSize >= 4) {
                     int[] tile4 = new int[] { row, col + 2 };
-                    if (shipSize >= 5){
+                    if (shipSize >= 5) {
                         int[] tile5 = new int[] { row, col - 2 };
                         int[][] tileSet = new int[][] { tile1, tile2, tile3, tile4, tile5 };
                         return tileSet;
@@ -80,7 +80,7 @@ public class BSPlayer {
                         int[][] tileSet = new int[][] { tile1, tile2, tile3, tile4 };
                         return tileSet;
                     }
-                } else{
+                } else {
                     int[][] tileSet = new int[][] { tile1, tile2, tile3 };
                     return tileSet;
                 }
@@ -114,10 +114,10 @@ public class BSPlayer {
         String tile = board[row][col];
         if (tile.equals("o")) {
             board[row][col] = "m";
-            JOptionPane.showMessageDialog(null, "No ship there!", "Battleship Fire Phase",1);
+            JOptionPane.showMessageDialog(null, "No ship there!", "Battleship Fire Phase", 1);
             return true;
         } else if (tile.equals("x") || tile.equals("m")) {
-            JOptionPane.showMessageDialog(null, "This tile has already been hit!", "Battleship Fire Phase",1);
+            JOptionPane.showMessageDialog(null, "This tile has already been hit!", "Battleship Fire Phase", 1);
             return false;
         } else {
             int shipIndex = Integer.parseInt(tile);
@@ -129,47 +129,47 @@ public class BSPlayer {
 
     public void shipHit(int ship) {
         ships[ship] -= 1;
-        if (ships[ship] == 0){
+        if (ships[ship] == 0) {
             MediaPlayer mediaPlayer = playSound(true);
             mediaPlayer.play();
-            JOptionPane.showMessageDialog(null, "A ship has been sunk!", "Battleship Fire Phase",1);
+            JOptionPane.showMessageDialog(null, "A ship has been sunk!", "Battleship Fire Phase", 1);
             return;
         }
         MediaPlayer mediaPlayer = playSound(false);
         mediaPlayer.play();
-        JOptionPane.showMessageDialog(null, "You hit something!", "Battleship Fire Phase",1);
+        JOptionPane.showMessageDialog(null, "You hit something!", "Battleship Fire Phase", 1);
     }
 
-    public MediaPlayer playSound(boolean sink){
+    public MediaPlayer playSound(boolean sink) {
         JFXPanel panel = new JFXPanel();
         // Unique sounds for sinking a ship should be added
-        if (PlatformUtil.isMac()){
-            if (sink){
+        if (PlatformUtil.isMac()) {
+            if (sink) {
                 Random rand = new Random();
-                int randNum = rand.nextInt(4)+1;
+                int randNum = rand.nextInt(4) + 1;
                 String bip = "Sounds/explosion" + randNum + ".mp3";
                 Media hit = new Media(new File(bip).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
                 return mediaPlayer;
             } else {
                 Random rand = new Random();
-                int randNum = rand.nextInt(4)+1;
+                int randNum = rand.nextInt(4) + 1;
                 String bip = "Sounds/explosion" + randNum + ".mp3";
                 Media hit = new Media(new File(bip).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
                 return mediaPlayer;
             }
         } else {
-            if (sink){
+            if (sink) {
                 Random rand = new Random();
-                int randNum = rand.nextInt(4)+1;
+                int randNum = rand.nextInt(4) + 1;
                 String bip = "Sounds\\explosion" + randNum + ".mp3";
                 Media hit = new Media(new File(bip).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
                 return mediaPlayer;
             } else {
                 Random rand = new Random();
-                int randNum = rand.nextInt(4)+1;
+                int randNum = rand.nextInt(4) + 1;
                 String bip = "Sounds\\explosion" + randNum + ".mp3";
                 Media hit = new Media(new File(bip).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
@@ -178,28 +178,38 @@ public class BSPlayer {
         }
     }
 
-    public boolean checkShips(){
+    public int countShips() {
+        int shipsLeft = 0;
+        for (int x = 0; x < ships.length; x++) {
+            if (ships[x] != 0) {
+                shipsLeft++;
+            }
+        }
+        return shipsLeft;
+    }
+
+    public boolean checkShips() {
         boolean shipsLeft = false;
-        for (int x = 0; x < ships.length; x++){
-            if (ships[x] != 0){
+        for (int x = 0; x < ships.length; x++) {
+            if (ships[x] != 0) {
                 shipsLeft = true;
             }
         }
         return shipsLeft;
     }
 
-    public void setBoard(String saveBoard){
+    public void setBoard(String saveBoard) {
         int x = 0;
         int ship0 = 0;
         int ship1 = 0;
         int ship2 = 0;
-        for(int j = 0; j < board.length; j++){
-            for(int k = 0; k < 10; k++){
-                if (saveBoard.charAt(x) == '0'){
+        for (int j = 0; j < board.length; j++) {
+            for (int k = 0; k < 10; k++) {
+                if (saveBoard.charAt(x) == '0') {
                     ship0 += 1;
-                } else if (saveBoard.charAt(x) == '1'){
+                } else if (saveBoard.charAt(x) == '1') {
                     ship1 += 1;
-                } else if (saveBoard.charAt(x) == '2'){
+                } else if (saveBoard.charAt(x) == '2') {
                     ship2 += 1;
                 }
                 board[j][k] = Character.toString(saveBoard.charAt(x));
@@ -209,21 +219,25 @@ public class BSPlayer {
         loadShips(ship0, ship1, ship2);
     }
 
-    public void loadShips(int ship0, int ship1, int ship2){
+    public void loadShips(int ship0, int ship1, int ship2) {
         ships[0] = ship0;
         ships[1] = ship1;
         ships[2] = ship2;
-    }    
+    }
 
     public int getShipsDeployed() {
         return shipsDeployed;
     }
 
+    public void setShipsDeployed(int shipsDeployed) {
+        this.shipsDeployed = shipsDeployed;
+    }
+
     @Override
     public String toString() {
         String string = "";
-        for(int i = 0; i < board.length; i ++){
-            for(int j = 0; j < 10; j++){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < 10; j++) {
                 string += board[i][j];
             }
         }

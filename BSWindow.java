@@ -23,7 +23,7 @@ public class BSWindow extends JFrame {
         this.add(display, BorderLayout.CENTER);
 
         this.setJMenuBar(menuBar);
-        
+
         this.setVisible(true);
     }
 

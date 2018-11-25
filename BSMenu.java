@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class BSMenu extends JMenuBar{
+public class BSMenu extends JMenuBar {
     JMenu menu = new JMenu("File");
     JMenuItem save = new JMenuItem("Save");
     JMenuItem load = new JMenuItem("Load");
@@ -11,7 +11,7 @@ public class BSMenu extends JMenuBar{
     JFileChooser fileChooser = new JFileChooser();
     File selectedFile;
 
-    public BSMenu(BSWindow window){
+    public BSMenu(BSWindow window) {
         menu.add(load);
         menu.add(qload);
         menu.add(save);
@@ -20,8 +20,8 @@ public class BSMenu extends JMenuBar{
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (window.game.isDeploy()){
-                    JOptionPane.showMessageDialog(null, "All player must deploy ships before saving.", "Save Error",0);
+                if (window.game.isDeploy()) {
+                    JOptionPane.showMessageDialog(null, "All player must deploy ships before saving.", "Save Error", 0);
                 } else {
                     window.game.saveToFile("save.txt");
                 }
@@ -32,16 +32,16 @@ public class BSMenu extends JMenuBar{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                //choose file
+                // choose file
                 fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
                 int result = fileChooser.showOpenDialog(window);
-                if(result == JFileChooser.APPROVE_OPTION){
-                    int shipMax = 6;
+                if (result == JFileChooser.APPROVE_OPTION) {
                     window.display.setBlankDraw(true);
                     window.repaint();
-                    if (window.game.isDeploy()){
+                    if (window.game.isDeploy()) {
                         window.game.setDeploy(false);
-                        window.game.setShipsDeploy(shipMax);
+                        window.display.setP1FirstFire(false);
+                        window.game.setShipsDeployed(window.game.getShipMax());
                     }
                     selectedFile = fileChooser.getSelectedFile();
                     System.out.println("Selected file: " + selectedFile.getAbsolutePath());
@@ -57,13 +57,13 @@ public class BSMenu extends JMenuBar{
             @Override
             public void actionPerformed(ActionEvent e) {
                 File fName = new File("save.txt");
-                if (fName.exists()){
-                    int shipMax = 6;
+                if (fName.exists()) {
                     window.display.setBlankDraw(true);
                     window.repaint();
-                    if (window.game.isDeploy()){
+                    if (window.game.isDeploy()) {
                         window.game.setDeploy(false);
-                        window.game.setShipsDeploy(shipMax);
+                        window.display.setP1FirstFire(false);
+                        window.game.setShipsDeployed(window.game.getShipMax());
                     }
                     window.game.initFromFile(fName);
                     window.repaint();
@@ -73,7 +73,5 @@ public class BSMenu extends JMenuBar{
             }
         });
     }
-
-
 
 }

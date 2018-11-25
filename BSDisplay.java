@@ -17,7 +17,10 @@ public class BSDisplay extends JPanel {
     int clickedRow, clickedCol;
     JRadioButton vertical = new JRadioButton("Vertical");
     JRadioButton horizontal = new JRadioButton("Horizontal");
-    JPanel northPanel = new JPanel();
+    JLabel p1ShipCount = new JLabel();
+    JLabel p2ShipCount = new JLabel();
+    JPanel orientationPanel = new JPanel();
+    JPanel scorePanel = new JPanel();
 
     Color boardColor = Color.BLACK;
     Color shipColor = Color.RED;
@@ -36,33 +39,33 @@ public class BSDisplay extends JPanel {
             }
         });
 
-        this.addKeyListener(new KeyListener() {
-            public void keyPressed(KeyEvent ke) {
-                processKey(ke);
-            }
-
-            public void keyReleased(KeyEvent ke) {
-            }
-
-            public void keyTyped(KeyEvent ke) {
-            }
-        });
-
         this.setFocusable(true);
         this.setFocusTraversalKeysEnabled(false);
-        JOptionPane.showMessageDialog(null, "Player 1 may now deploy ships", "Battleship Deployment Phase",1);
+        JOptionPane.showMessageDialog(null, "Player 1 may now deploy ships", "Battleship Deployment Phase", 1);
     }
-    
-    public void initWindow(){
+
+    public void initWindow() {
         ButtonGroup deployOrientation = new ButtonGroup();
-        
+
         horizontal.doClick();
         deployOrientation.add(vertical);
         deployOrientation.add(horizontal);
-        northPanel.add(horizontal, SwingConstants.CENTER);
-        northPanel.add(vertical, SwingConstants.CENTER);
+        orientationPanel.add(horizontal, SwingConstants.CENTER);
+        orientationPanel.add(vertical, SwingConstants.CENTER);
 
-        this.add(northPanel, BorderLayout.NORTH);
+        this.add(orientationPanel, BorderLayout.NORTH);
+    }
+
+    public void updateWindow() {
+        this.remove(orientationPanel);
+        String p1Label = "Player 1: " + game.findShipCount(game.player1);
+        p1ShipCount.setText(p1Label);
+        String p2Label = "Player 2: " + game.findShipCount(game.player2);
+        p2ShipCount.setText(p2Label);
+
+        scorePanel.add(p2ShipCount, SwingConstants.CENTER);
+        scorePanel.add(p1ShipCount, SwingConstants.CENTER);
+        this.add(scorePanel, BorderLayout.NORTH);
     }
 
     public void processClick(MouseEvent me) {
@@ -70,10 +73,11 @@ public class BSDisplay extends JPanel {
         int clicked_Y = me.getY();
         int boardAdjust = 2;
         boolean vert = vertical.isSelected();
-        if (!game.getGameOver()){
+        if (!game.getGameOver()) {
             if (game.isDeploy()) {
                 if (game.getTurn()) {
-                    if (clicked_X < xStart1 || clicked_Y < yStart1 || clicked_X > (game.getCols() + boardAdjust) * cellSize
+                    if (clicked_X < xStart1 || clicked_Y < yStart1
+                            || clicked_X > (game.getCols() + boardAdjust) * cellSize
                             || clicked_Y > (game.getRows() + boardAdjust) * cellSize) {
                         System.err.println("You aren't on the board!");
                     } else {
@@ -106,7 +110,8 @@ public class BSDisplay extends JPanel {
                         game.fireRound(clickedRow, clickedCol);
                     }
                 } else {
-                    if (clicked_X < xStart1 || clicked_Y < yStart1 || clicked_X > (game.getCols() + boardAdjust) * cellSize
+                    if (clicked_X < xStart1 || clicked_Y < yStart1
+                            || clicked_X > (game.getCols() + boardAdjust) * cellSize
                             || clicked_Y > (game.getRows() + boardAdjust) * cellSize) {
                         System.err.println("You aren't on the board!");
                     } else {
@@ -119,58 +124,27 @@ public class BSDisplay extends JPanel {
                 }
             }
         }
-        if (game.getShipsDeployed() == (game.getShipMax())){
+        if (game.getShipsDeployed() == (game.getShipMax())) {
             repaint();
-            JOptionPane.showMessageDialog(null, "Player 2 may now deploy ships", "Battleship Deployment Phase",1);
-            return;
-        } else if (game.getShipsDeployed() == game.getShipMax()*2 && p1FirstFire){
-            p1FirstFire = false;
-            blankDraw = true;
-            repaint();
-            this.remove(northPanel);
-            JOptionPane.showMessageDialog(null, "Player 1 may now fire!", "Battleship Deployment Phase",1);
+            JOptionPane.showMessageDialog(null, "Player 2 may now deploy ships", "Battleship Deployment Phase", 1);
+        } else if (game.getShipsDeployed() == game.getShipMax() * 2) {
+            updateWindow();
+            if (p1FirstFire) {
+                p1FirstFire = false;
+                blankDraw = true;
+                repaint();
+                JOptionPane.showMessageDialog(null, "Player 1 may now fire!", "Battleship Deployment Phase", 1);
+            }
         }
         repaint();
     }
 
-    public void processKey(KeyEvent ke) {
-        int code = ke.getKeyCode();
-        System.err.print("\n Key Pressed " + code);
-
-        // switch (code) {
-        // case KeyEvent.VK_S:
-        //     if (game.isDeploy()){
-        //         JOptionPane.showMessageDialog(null, "All player must deploy ships before saving.", "Save Error",0);
-        //     } else {
-        //         clickedCol--;
-        //         System.err.print("  save to file ");
-        //         game.saveToFile("save.txt");
-        //         return;
-        //     }
-        // case KeyEvent.VK_R:
-        //     blankDraw = true;
-        //     if (shipsDeployed >= 6){
-        //         repaint();
-        //         clickedCol--;
-        //         System.err.print("  retrieve from file ");
-        //         game.initFromFile("save.txt");
-        //         repaint();
-        //         return;
-        //     } else {
-        //         repaint();
-        //         shipsDeployed = 7;
-        //         clickedCol--;
-        //         System.err.print("  retrieve from file ");
-        //         game.initFromFile("save.txt");
-        //         repaint();
-        //         return;
-        //     }
-        // }
-        // repaint();
+    public void setBlankDraw(boolean bool) {
+        blankDraw = bool;
     }
 
-    public void setBlankDraw(boolean bool){
-        blankDraw = bool;
+    public void setP1FirstFire(boolean p1FirstFire) {
+        this.p1FirstFire = p1FirstFire;
     }
 
     public void paintComponent(Graphics g) {
@@ -183,7 +157,7 @@ public class BSDisplay extends JPanel {
         int boardAdjust = 2;
 
         // Draw an empty board
-        if (blankDraw){
+        if (blankDraw) {
             blankDraw = false;
             for (int row = 0; row < game.getRows(); row++) {
                 x = xStart1;
@@ -208,9 +182,9 @@ public class BSDisplay extends JPanel {
             }
         }
         // Draw the board during the Deployment phase.
-        else if (game.isDeploy()){
+        else if (game.isDeploy()) {
             // Draw the board for Player 1
-            if (game.getTurn()){
+            if (game.getTurn()) {
                 for (int row = 0; row < game.getRows(); row++) {
                     x = xStart1;
                     for (int col = 0; col < game.getCols(); col++) {
@@ -218,9 +192,9 @@ public class BSDisplay extends JPanel {
                         g.drawRect(x, y, cellSize, cellSize);
 
                         String cell = game.getTile(row, col, player1);
-                        if (cell.equals("o")){
-                            
-                        } else{
+                        if (cell.equals("o")) {
+
+                        } else {
                             int tokenSize = (int) (cellSize * tokenScale);
                             int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                             g.setColor(shipColor);
@@ -232,7 +206,7 @@ public class BSDisplay extends JPanel {
                 }
             }
             // Draw the board for Player 2
-            else{
+            else {
                 x = xStart2;
                 for (int row = 0; row < game.getRows(); row++) {
                     x = xStart2;
@@ -241,9 +215,9 @@ public class BSDisplay extends JPanel {
                         g.drawRect(x, y, cellSize, cellSize);
 
                         String cell = game.getTile(row, col, player2);
-                        if (cell.equals("o")){
-                            
-                        } else{
+                        if (cell.equals("o")) {
+
+                        } else {
                             int tokenSize = (int) (cellSize * tokenScale);
                             int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                             g.setColor(shipColor);
@@ -256,7 +230,7 @@ public class BSDisplay extends JPanel {
             }
         }
         // Draw the board after the game is over.
-        else if (game.getGameOver()){
+        else if (game.getGameOver()) {
             // Draw the board for Player 1
             for (int row = 0; row < game.getRows(); row++) {
                 x = xStart1;
@@ -264,19 +238,19 @@ public class BSDisplay extends JPanel {
                     g.setColor(boardColor);
                     g.drawRect(x, y, cellSize, cellSize);
                     String cell = game.getTile(row, col, player1);
-                    if (cell.equals("o")){
+                    if (cell.equals("o")) {
 
-                    } else if (cell.equals("x")){
+                    } else if (cell.equals("x")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(hitColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else if(cell.equals("m")){
+                    } else if (cell.equals("m")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(missColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else{
+                    } else {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(shipColor);
@@ -295,19 +269,19 @@ public class BSDisplay extends JPanel {
                     g.setColor(boardColor);
                     g.drawRect(x, y, cellSize, cellSize);
                     String cell = game.getTile(row, col, player2);
-                    if (cell.equals("o")){
-                        
-                    } else if (cell.equals("x")){
+                    if (cell.equals("o")) {
+
+                    } else if (cell.equals("x")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(hitColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else if(cell.equals("m")){
+                    } else if (cell.equals("m")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(missColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else{
+                    } else {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(shipColor);
@@ -317,9 +291,9 @@ public class BSDisplay extends JPanel {
                 }
                 y += cellSize;
             }
-        } 
+        }
         // Draw the board during the Player 1 Fire phase.
-        else if (game.getTurn()){
+        else if (game.getTurn()) {
             // Draw the board for Player 1
             for (int row = 0; row < game.getRows(); row++) {
                 x = xStart1;
@@ -327,19 +301,19 @@ public class BSDisplay extends JPanel {
                     g.setColor(boardColor);
                     g.drawRect(x, y, cellSize, cellSize);
                     String cell = game.getTile(row, col, player1);
-                    if (cell.equals("o")){
+                    if (cell.equals("o")) {
 
-                    } else if (cell.equals("x")){
+                    } else if (cell.equals("x")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(hitColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else if(cell.equals("m")){
+                    } else if (cell.equals("m")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(missColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else{
+                    } else {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(shipColor);
@@ -357,12 +331,12 @@ public class BSDisplay extends JPanel {
                     g.setColor(boardColor);
                     g.drawRect(x, y, cellSize, cellSize);
                     String cell = game.getTile(row, col, player2);
-                    if (cell.equals("x")){
+                    if (cell.equals("x")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(hitColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else if(cell.equals("m")){
+                    } else if (cell.equals("m")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(missColor);
@@ -372,9 +346,9 @@ public class BSDisplay extends JPanel {
                 }
                 y += cellSize;
             }
-        } 
+        }
         // Draw the board during the Player 2 Fire phase.
-        else if (!game.getTurn()){
+        else if (!game.getTurn()) {
             // Draw the board for Player 1
             for (int row = 0; row < game.getRows(); row++) {
                 x = xStart1;
@@ -383,12 +357,12 @@ public class BSDisplay extends JPanel {
                     g.setColor(boardColor);
                     g.drawRect(x, y, cellSize, cellSize);
                     String cell = game.getTile(row, col, player1);
-                    if (cell.equals("x")){
+                    if (cell.equals("x")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(hitColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else if(cell.equals("m")){
+                    } else if (cell.equals("m")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(missColor);
@@ -407,19 +381,19 @@ public class BSDisplay extends JPanel {
                     g.setColor(boardColor);
                     g.drawRect(x, y, cellSize, cellSize);
                     String cell = game.getTile(row, col, player2);
-                    if (cell.equals("o")){
-                        
-                    } else if (cell.equals("x")){
+                    if (cell.equals("o")) {
+
+                    } else if (cell.equals("x")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(hitColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else if(cell.equals("m")){
+                    } else if (cell.equals("m")) {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(missColor);
                         g.fillOval(x + tokenIndent, y + tokenIndent, tokenSize, tokenSize);
-                    } else{
+                    } else {
                         int tokenSize = (int) (cellSize * tokenScale);
                         int tokenIndent = (cellSize - tokenSize) / boardAdjust;
                         g.setColor(shipColor);
