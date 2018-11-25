@@ -7,11 +7,13 @@ public class BSMenu extends JMenuBar{
     JMenu menu = new JMenu("File");
     JMenuItem save = new JMenuItem("Save");
     JMenuItem load = new JMenuItem("Load");
+    JMenuItem qload = new JMenuItem("Load Last");
     JFileChooser fileChooser = new JFileChooser();
     File selectedFile;
 
     public BSMenu(BSWindow window){
         menu.add(load);
+        menu.add(qload);
         menu.add(save);
         this.add(menu);
 
@@ -46,11 +48,28 @@ public class BSMenu extends JMenuBar{
                     window.game.initFromFile(selectedFile);
                     window.repaint();
                 } else {
-                    JOptionPane.showMessageDialog(window, "No file selected", "Error", 1);
+                    JOptionPane.showMessageDialog(window, "No file selected.", "Error", 1);
                 }
+            }
+        });
 
-
-
+        qload.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File fName = new File("save.txt");
+                if (fName.exists()){
+                    int shipMax = 6;
+                    window.display.setBlankDraw(true);
+                    window.repaint();
+                    if (window.game.isDeploy()){
+                        window.game.setDeploy(false);
+                        window.game.setShipsDeploy(shipMax);
+                    }
+                    window.game.initFromFile(fName);
+                    window.repaint();
+                } else {
+                    JOptionPane.showMessageDialog(window, "A previous save does not exist.", "Error", 0);
+                }
             }
         });
     }
