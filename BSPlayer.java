@@ -14,7 +14,7 @@ public class BSPlayer {
     private String[][] board;
     private int[] ships;
     private int shipsDeployed = 0;
-    private int shipHP = 3;
+    private int shipHP = 2;
 
     public BSPlayer(int rows, int cols, int ships) {
         this.board = new String[rows][cols];
@@ -25,32 +25,69 @@ public class BSPlayer {
     }
     
     public boolean deployShips(int row, int col, boolean vert) {
-        int[][] tileSet = convShipTiles(row, col, vert);
+        int[][] tileSet = convShipTiles(row, col, shipHP, vert);
         if (!shipAlreadyThere(tileSet)) {
             for (int x = 0; x < tileSet.length; x++) {
                 board[tileSet[x][0]][tileSet[x][1]] = Integer.toString(shipsDeployed);
             }
             ships[shipsDeployed] = shipHP;
             shipsDeployed++;
+            if (shipsDeployed != 2){
+                shipHP++;
+            }
             return true;
         } else{
             return false;
         }
     }
 
-    public int[][] convShipTiles(int row, int col, boolean vert) {
+    public int[][] convShipTiles(int row, int col, int shipSize, boolean vert) {
         if (vert) {
             int[] tile1 = new int[] { row + 1, col };
             int[] tile2 = new int[] { row, col };
-            int[] tile3 = new int[] { row - 1, col };
-            int[][] tileSet = new int[][] { tile1, tile2, tile3 };
-            return tileSet;
+            if (shipSize >= 3){
+                int[] tile3 = new int[] { row - 1, col };
+                if (shipSize >= 4){
+                    int[] tile4 = new int[] { row + 2, col };
+                    if (shipSize >= 5){
+                        int[] tile5 = new int[] { row - 2, col };
+                        int[][] tileSet = new int[][] { tile1, tile2, tile3, tile4, tile5 };
+                        return tileSet;
+                    } else {
+                        int[][] tileSet = new int[][] { tile1, tile2, tile3, tile4 };
+                        return tileSet;
+                    }
+                } else{
+                    int[][] tileSet = new int[][] { tile1, tile2, tile3 };
+                    return tileSet;
+                }
+            } else {
+                int[][] tileSet = new int[][] { tile1, tile2 };
+                return tileSet;
+            }
         } else {
             int[] tile1 = new int[] { row, col + 1 };
             int[] tile2 = new int[] { row, col };
-            int[] tile3 = new int[] { row, col - 1 };
-            int[][] tileSet = new int[][] { tile1, tile2, tile3 };
-            return tileSet;
+            if (shipSize >= 3){
+                int[] tile3 = new int[] { row, col - 1 };
+                if (shipSize >= 4){
+                    int[] tile4 = new int[] { row, col + 2 };
+                    if (shipSize >= 5){
+                        int[] tile5 = new int[] { row, col - 2 };
+                        int[][] tileSet = new int[][] { tile1, tile2, tile3, tile4, tile5 };
+                        return tileSet;
+                    } else {
+                        int[][] tileSet = new int[][] { tile1, tile2, tile3, tile4 };
+                        return tileSet;
+                    }
+                } else{
+                    int[][] tileSet = new int[][] { tile1, tile2, tile3 };
+                    return tileSet;
+                }
+            } else {
+                int[][] tileSet = new int[][] { tile1, tile2 };
+                return tileSet;
+            }
         }
     }
 
@@ -177,6 +214,10 @@ public class BSPlayer {
         ships[1] = ship1;
         ships[2] = ship2;
     }    
+
+    public int getShipsDeployed() {
+        return shipsDeployed;
+    }
 
     @Override
     public String toString() {

@@ -12,10 +12,12 @@ public class BSDisplay extends JPanel {
     int cellSize = 30;
     int shipsDeployed = 0;
     boolean blankDraw = false;
+    boolean p1FirstFire = true;
     double tokenScale = 0.70;
     int clickedRow, clickedCol;
     JRadioButton vertical = new JRadioButton("Vertical");
     JRadioButton horizontal = new JRadioButton("Horizontal");
+    JPanel northPanel = new JPanel();
 
     Color boardColor = Color.BLACK;
     Color shipColor = Color.RED;
@@ -57,7 +59,6 @@ public class BSDisplay extends JPanel {
         horizontal.doClick();
         deployOrientation.add(vertical);
         deployOrientation.add(horizontal);
-        JPanel northPanel = new JPanel();
         northPanel.add(horizontal, SwingConstants.CENTER);
         northPanel.add(vertical, SwingConstants.CENTER);
 
@@ -71,7 +72,6 @@ public class BSDisplay extends JPanel {
         boolean vert = vertical.isSelected();
         if (!game.getGameOver()){
             if (game.isDeploy()) {
-                shipsDeployed += 1;
                 if (game.getTurn()) {
                     if (clicked_X < xStart1 || clicked_Y < yStart1 || clicked_X > (game.getCols() + boardAdjust) * cellSize
                             || clicked_Y > (game.getRows() + boardAdjust) * cellSize) {
@@ -119,14 +119,15 @@ public class BSDisplay extends JPanel {
                 }
             }
         }
-        if (shipsDeployed == 3){
+        if (game.getShipsDeployed() == (game.getShipMax())){
             repaint();
             JOptionPane.showMessageDialog(null, "Player 2 may now deploy ships", "Battleship Deployment Phase",1);
             return;
-        } else if (shipsDeployed == 6){
+        } else if (game.getShipsDeployed() == game.getShipMax()*2 && p1FirstFire){
+            p1FirstFire = false;
             blankDraw = true;
             repaint();
-            shipsDeployed += 1;
+            this.remove(northPanel);
             JOptionPane.showMessageDialog(null, "Player 1 may now fire!", "Battleship Deployment Phase",1);
         }
         repaint();

@@ -6,7 +6,7 @@ public class BSLogic {
 
     private int rows;
     private int cols;
-    private int ships = 3;
+    private int shipMax = 5;
     private int shipsDeployed = 0;
     public BSPlayer player1;
     public BSPlayer player2;
@@ -17,8 +17,8 @@ public class BSLogic {
     public BSLogic(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        this.player1 = new BSPlayer(rows, cols, ships);
-        this.player2 = new BSPlayer(rows, cols, ships);
+        this.player1 = new BSPlayer(rows, cols, shipMax);
+        this.player2 = new BSPlayer(rows, cols, shipMax);
         this.deployPhase = true;
         this.p1Turn = true;
     }
@@ -74,26 +74,26 @@ public class BSLogic {
 
     public void deployShip(int row, int col, boolean vert) {
         if (deploymentOnBoard(row, col, vert)) {
-            if (shipsDeployed < ships) {
+            if (shipsDeployed < shipMax) {
                 if (player1.deployShips(row, col, vert)) {
-                    shipsDeployed++;
+                    shipsDeployed = player1.getShipsDeployed() + player2.getShipsDeployed();
                     System.err.println("Player one ship deployed at: " + row + ", " + col);
                 } else {
                     System.err.println("A ship is already there!");
                 }
-            } else if (shipsDeployed < (ships * 2)) {
+            } else if (shipsDeployed < (shipMax * 2)) {
                 if (player2.deployShips(row, col, vert)) {
-                    shipsDeployed++;
+                    shipsDeployed = player1.getShipsDeployed() + player2.getShipsDeployed();
                     System.err.println("Player two ship deployed at: " + row + ", " + col);
                 } else {
                     System.err.println("A ship is already there!");
                 }
             }
-            if (shipsDeployed == (ships * 2)) {
+            if (shipsDeployed == (shipMax * 2)) {
                 deployPhase = false;
                 p1Turn = true;
                 System.err.println("Player one may now fire!");
-            } else if (shipsDeployed == ships) {
+            } else if (shipsDeployed == shipMax) {
                 p1Turn = false;
                 System.err.println("Player two may deploy ships!");
             }
@@ -186,8 +186,12 @@ public class BSLogic {
         return cols;
     }
 
-    public int getShipCount() {
-        return ships;
+    public int getShipsDeployed() {
+        return shipsDeployed;
+    }
+
+    public int getShipMax() {
+        return shipMax;
     }
 
     public boolean getGameOver() {
