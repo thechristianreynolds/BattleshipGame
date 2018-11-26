@@ -225,8 +225,16 @@ public class BSPlayer {
         ships[2] = ship2;
     }
 
+    public int getShipHP() {
+        return shipHP;
+    }
+
     public int getShipsDeployed() {
         return shipsDeployed;
+    }
+
+    public int getBoardLen(){
+        return board.length;
     }
 
     public void setShipsDeployed(int shipsDeployed) {

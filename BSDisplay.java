@@ -10,11 +10,13 @@ public class BSDisplay extends JPanel {
     int xStart2 = 430;
     int yStart2 = 50;
     int cellSize = 30;
+    double tokenScale = 0.70;
+    int clickedRow, clickedCol;
     int shipsDeployed = 0;
     boolean blankDraw = false;
     boolean p1FirstFire = true;
-    double tokenScale = 0.70;
-    int clickedRow, clickedCol;
+    boolean p2FirstDeploy = true;
+
     JRadioButton vertical = new JRadioButton("Vertical");
     JRadioButton horizontal = new JRadioButton("Horizontal");
     JLabel p1ShipCount = new JLabel();
@@ -124,7 +126,8 @@ public class BSDisplay extends JPanel {
                 }
             }
         }
-        if (game.getShipsDeployed() == (game.getShipMax())) {
+        if (game.getShipsDeployed() == (game.getShipMax()) && p2FirstDeploy) {
+            p2FirstDeploy = false;
             repaint();
             JOptionPane.showMessageDialog(null, "Player 2 may now deploy ships", "Battleship Deployment Phase", 1);
         } else if (game.getShipsDeployed() == game.getShipMax() * 2) {

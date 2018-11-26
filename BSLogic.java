@@ -73,43 +73,83 @@ public class BSLogic {
     }
 
     public void deployShip(int row, int col, boolean vert) {
-        if (deploymentOnBoard(row, col, vert)) {
+        if (p1Turn){
             if (shipsDeployed < shipMax) {
-                if (player1.deployShips(row, col, vert)) {
-                    shipsDeployed = player1.getShipsDeployed() + player2.getShipsDeployed();
-                    System.err.println("Player one ship deployed at: " + row + ", " + col);
+                if (deploymentOnBoard(row, col, player1.getShipHP(), vert)) {
+                    if (player1.deployShips(row, col, vert)) {
+                        shipsDeployed = player1.getShipsDeployed() + player2.getShipsDeployed();
+                        System.err.println("Player one ship deployed at: " + row + ", " + col);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "A ship is already there!", "Deployment Error", 0);
+                    }
                 } else {
-                    System.err.println("A ship is already there!");
+                    JOptionPane.showMessageDialog(null, "That ship is out of bounds!", "Deployment Error", 0);
                 }
-            } else if (shipsDeployed < (shipMax * 2)) {
-                if (player2.deployShips(row, col, vert)) {
-                    shipsDeployed = player1.getShipsDeployed() + player2.getShipsDeployed();
-                    System.err.println("Player two ship deployed at: " + row + ", " + col);
-                } else {
-                    System.err.println("A ship is already there!");
-                }
-            }
-            if (shipsDeployed == (shipMax * 2)) {
-                deployPhase = false;
-                p1Turn = true;
-                System.err.println("Player one may now fire!");
-            } else if (shipsDeployed == shipMax) {
+            } 
+            if (shipsDeployed == shipMax) {
                 p1Turn = false;
                 System.err.println("Player two may deploy ships!");
             }
         } else {
-            System.err.println("That ship is out of bounds!");
+            if (shipsDeployed < shipMax * 2){
+                if (deploymentOnBoard(row, col, player2.getShipHP(), vert)){
+                    if (player2.deployShips(row, col, vert)) {
+                        shipsDeployed = player1.getShipsDeployed() + player2.getShipsDeployed();
+                        System.err.println("Player one ship deployed at: " + row + ", " + col);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "A ship is already there!", "Deployment Error", 0);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "That ship is out of bounds!", "Deployment Error", 0);
+                }
+            } 
+            if (shipsDeployed == shipMax * 2){
+                deployPhase = false;
+                p1Turn = true;
+            }
         }
     }
 
-    public boolean deploymentOnBoard(int row, int col, boolean vert) {
+    public boolean deploymentOnBoard(int row, int col, int shipLen, boolean vert) {
+        int two = 2;
+        int three = 3;
+        int four = 4;
+        int five = 5;
         if (vert) {
-            if ((row - 1) < 0 || (row + 1) > 9) {
-                return false;
+            if (shipLen == two) {
+                if ((row + 1) > player1.getBoardLen() - 1){
+                    return false;
+                }
+            } else if (shipLen == three){
+                if ((row - 1) < 0 || (row + 1) > player1.getBoardLen() - 1) {
+                    return false;
+                }
+            } else if (shipLen == four){
+                if ((row - 1) < 0 || (row + two) > player1.getBoardLen() - 1){
+                    return false;
+                }
+            } else if (shipLen == five){
+                if ((row - two) < 0 || (row + two) > player1.getBoardLen() - 1) {
+                    return false;
+                }
             }
         } else {
-            if ((col - 1) < 0 || (col + 1) > 9) {
-                return false;
+            if (shipLen == two) {
+                if ((col + 1) > player1.getBoardLen() - 1){
+                    return false;
+                }
+            } else if (shipLen == three){
+                if ((col - 1) < 0 || (col + 1) > player1.getBoardLen() - 1) {
+                    return false;
+                }
+            } else if (shipLen == four){
+                if ((col - 1) < 0 || (col + two) > player1.getBoardLen() - 1){
+                    return false;
+                }
+            } else if (shipLen == five){
+                if ((col - two) < 0 || (col + two) > player1.getBoardLen() - 1) {
+                    return false;
+                }
             }
         }
         return true;
