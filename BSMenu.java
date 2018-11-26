@@ -2,12 +2,14 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Scanner;
 
 public class BSMenu extends JMenuBar {
     JMenu menu = new JMenu("File");
     JMenuItem save = new JMenuItem("Save");
     JMenuItem load = new JMenuItem("Load");
     JMenuItem qload = new JMenuItem("Load Last");
+    JMenuItem records = new JMenuItem("Records");
     JFileChooser fileChooser = new JFileChooser();
     File selectedFile;
 
@@ -15,6 +17,7 @@ public class BSMenu extends JMenuBar {
         menu.add(load);
         menu.add(qload);
         menu.add(save);
+        menu.add(records);
         this.add(menu);
 
         save.addActionListener(new ActionListener() {
@@ -72,6 +75,24 @@ public class BSMenu extends JMenuBar {
                 }
             }
         });
-    }
 
+        records.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                try {
+                    File records = new File("records.txt");
+                    Scanner scanner = new Scanner(records);
+                    String message = "High Scores\n";
+                    if (records.exists()) {
+                        while (scanner.hasNext()) {
+                            message += scanner.nextLine() + "\n";
+                        }
+                        JOptionPane.showMessageDialog(null, message, "Records", 1);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Issue loading records");
+                }
+            }
+        });
+    }
 }

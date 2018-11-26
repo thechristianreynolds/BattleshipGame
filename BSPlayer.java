@@ -15,6 +15,7 @@ public class BSPlayer {
     private int[] ships;
     private int shipsDeployed = 0;
     private int shipHP = 2;
+    private int shotsTaken = 1;
 
     public BSPlayer(int rows, int cols, int ships) {
         this.board = new String[rows][cols];
@@ -106,15 +107,12 @@ public class BSPlayer {
         return board[row][col];
     }
 
-    public void fireRound(int row, int col) {
-        checkHit(row, col);
-    }
-
     public boolean checkHit(int row, int col) {
         String tile = board[row][col];
         if (tile.equals("o")) {
             board[row][col] = "m";
             JOptionPane.showMessageDialog(null, "No ship there!", "Battleship Fire Phase", 1);
+            shotsTaken++;
             return true;
         } else if (tile.equals("x") || tile.equals("m")) {
             JOptionPane.showMessageDialog(null, "This tile has already been hit!", "Battleship Fire Phase", 1);
@@ -123,6 +121,7 @@ public class BSPlayer {
             int shipIndex = Integer.parseInt(tile);
             shipHit(shipIndex);
             board[row][col] = "x";
+            shotsTaken++;
             return true;
         }
     }
@@ -188,21 +187,13 @@ public class BSPlayer {
         return shipsLeft;
     }
 
-    public boolean checkShips() {
-        boolean shipsLeft = false;
-        for (int x = 0; x < ships.length; x++) {
-            if (ships[x] != 0) {
-                shipsLeft = true;
-            }
-        }
-        return shipsLeft;
-    }
-
     public void setBoard(String saveBoard) {
         int x = 0;
         int ship0 = 0;
         int ship1 = 0;
         int ship2 = 0;
+        int ship3 = 0;
+        int ship4 = 0;
         for (int j = 0; j < board.length; j++) {
             for (int k = 0; k < 10; k++) {
                 if (saveBoard.charAt(x) == '0') {
@@ -211,30 +202,44 @@ public class BSPlayer {
                     ship1 += 1;
                 } else if (saveBoard.charAt(x) == '2') {
                     ship2 += 1;
+                } else if (saveBoard.charAt(x) == '3') {
+                    ship3 += 1;
+                } else if (saveBoard.charAt(x) == '4') {
+                    ship4 += 1;
                 }
                 board[j][k] = Character.toString(saveBoard.charAt(x));
                 x++;
             }
         }
-        loadShips(ship0, ship1, ship2);
+        loadShips(ship0, ship1, ship2, ship3, ship4);
     }
 
-    public void loadShips(int ship0, int ship1, int ship2) {
+    public void loadShips(int ship0, int ship1, int ship2, int ship3, int ship4) {
         ships[0] = ship0;
         ships[1] = ship1;
         ships[2] = ship2;
+        ships[3] = ship3;
+        ships[4] = ship4;
     }
 
     public int getShipHP() {
         return shipHP;
     }
 
+    public int getShotsTaken() {
+        return shotsTaken;
+    }
+
     public int getShipsDeployed() {
         return shipsDeployed;
     }
 
-    public int getBoardLen(){
+    public int getBoardLen() {
         return board.length;
+    }
+
+    public void setShotsTaken(int shotsTaken) {
+        this.shotsTaken = shotsTaken;
     }
 
     public void setShipsDeployed(int shipsDeployed) {
@@ -249,6 +254,7 @@ public class BSPlayer {
                 string += board[i][j];
             }
         }
+        string += "\n" + shotsTaken;
         return string;
     }
 }
