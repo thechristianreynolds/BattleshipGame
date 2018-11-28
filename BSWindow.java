@@ -1,3 +1,4 @@
+
 /* 
 * Author: Austin Kibler, Samir Lamichhane, Christian Reynolds
 * Purpose: This is the main window containing the main program function

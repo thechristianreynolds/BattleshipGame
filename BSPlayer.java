@@ -1,3 +1,4 @@
+
 /* 
 * Author: Austin Kibler, Samir Lamichhane, Christian Reynolds
 * Purpose: This class is the player containing the board and tracking the ships on each, also responsible for playing sounds
@@ -146,7 +147,7 @@ public class BSPlayer {
     public void playSound() {
         String os = System.getProperty("os.name");
         JFXPanel panel = new JFXPanel();
-        try{
+        try {
             if (os.toLowerCase().contains("Mac".toLowerCase())) {
                 Random rand = new Random();
                 int randNum = rand.nextInt(4) + 1;
@@ -164,7 +165,7 @@ public class BSPlayer {
                 mediaPlayer.setStartTime(new Duration(0));
                 mediaPlayer.play();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Issue playing sound");
         }
     }

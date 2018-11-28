@@ -1,3 +1,4 @@
+
 /* 
 * Author: Austin Kibler, Samir Lamichhane, Christian Reynolds
 * Purpose: This class is responsible for the menu, containing the save and load buttons as well as highscores and new game
