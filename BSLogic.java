@@ -116,7 +116,7 @@ public class BSLogic {
             p2Shots = Integer.parseInt(scan.useDelimiter("\n").next());
             playerTurn = scan.useDelimiter("\n").next();
         } catch (IOException e) {
-
+            System.err.println("Problem loading from file.");
         }
 
         player1.setBoard(p1Board);

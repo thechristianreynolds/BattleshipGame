@@ -2,37 +2,39 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.io.*;
 
 public class BSDisplay extends JPanel {
 
-    int xStart1 = 50;
-    int yStart1 = 50;
-    int xStart2 = 430;
-    int yStart2 = 50;
-    int cellSize = 30;
-    double tokenScale = 0.70;
-    int clickedRow, clickedCol;
-    int shipsDeployed = 0;
-    boolean blankDraw = false;
-    boolean p1FirstFire = true;
-    boolean p2FirstDeploy = true;
+    private int xStart1 = 50;
+    private int yStart1 = 50;
+    private int xStart2 = 430;
+    private int yStart2 = 50;
+    private int cellAcross = 10;
+    private int cellDown = 10;
+    private int cellSize = 30;
+    private double tokenScale = 0.70;
+    private int clickedRow, clickedCol;
+    private boolean blankDraw = false;
+    private boolean p1FirstFire = true;
+    private boolean p2FirstDeploy = true;
 
-    JRadioButton vertical = new JRadioButton("Vertical");
-    JRadioButton horizontal = new JRadioButton("Horizontal");
-    JLabel p1ShipCount = new JLabel();
-    JLabel p2ShipCount = new JLabel();
-    JPanel orientationPanel = new JPanel();
-    JPanel scorePanel = new JPanel();
+    private JRadioButton vertical = new JRadioButton("Vertical");
+    private JRadioButton horizontal = new JRadioButton("Horizontal");
+    private JLabel p1ShipCount = new JLabel();
+    private JLabel p2ShipCount = new JLabel();
+    private JPanel orientationPanel = new JPanel();
+    private JPanel scorePanel = new JPanel();
 
-    Color boardColor = Color.BLACK;
-    Color shipColor = Color.RED;
-    Color hitColor = Color.GREEN;
-    Color missColor = Color.BLACK;
+    private Color boardColor = Color.BLACK;
+    private Color shipColor = Color.RED;
+    private Color hitColor = Color.GREEN;
+    private Color missColor = Color.BLACK;
 
     BSLogic game;
 
-    public BSDisplay(BSLogic game) {
-        this.game = game;
+    public BSDisplay() {
+        this.game = new BSLogic(cellAcross, cellDown);
         initWindow();
 
         this.addMouseListener(new MouseAdapter() {
@@ -56,6 +58,18 @@ public class BSDisplay extends JPanel {
         orientationPanel.add(vertical, SwingConstants.CENTER);
 
         this.add(orientationPanel, BorderLayout.NORTH);
+    }
+
+    public void newGame(){
+        this.remove(scorePanel);
+        this.blankDraw = false;
+        this.p1FirstFire = true;
+        this.p2FirstDeploy = true;
+        // BSLogic nextGame = new BSLogic(cellAcross, cellDown);
+        this.game = new BSLogic(cellAcross, cellDown);
+        initWindow();
+        repaint();
+        JOptionPane.showMessageDialog(null, "Player 1 may now deploy ships", "Battleship Deployment Phase", 1);
     }
 
     public void updateWindow() {
@@ -139,7 +153,47 @@ public class BSDisplay extends JPanel {
                 JOptionPane.showMessageDialog(null, "Player 1 may now fire!", "Battleship Deployment Phase", 1);
             }
         }
+        if (game.getGameOver()){
+            showHighScores();
+        }
         repaint();
+    }
+
+    public void showHighScores(){
+        try {
+            File records = new File("records.txt");
+            Scanner scanner = new Scanner(records);
+            String message = "High Scores\n";
+            if (!game.getGameOver()){
+                if (records.exists()) {
+                    while (scanner.hasNext()) {
+                        message += scanner.nextLine() + "\n";
+                    }
+                    JOptionPane.showMessageDialog(null, message, "Records", 1);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Records not found.", "Records", 0);
+                }
+            } else {
+                if (records.exists()) {
+                    while (scanner.hasNext()) {
+                        message += scanner.nextLine() + "\n";
+                    }
+                    JOptionPane.showMessageDialog(null, message, "Records", 1);
+                    int choice = JOptionPane.showOptionDialog(null, "Would you like to play again?", "Records", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                    if (choice == JOptionPane.YES_OPTION){
+                        newGame();
+                    } else {
+                        System.exit(0);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Issue loading records");
+        }
+    }
+
+    public BSLogic getGame() {
+        return game;
     }
 
     public void setBlankDraw(boolean bool) {

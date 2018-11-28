@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 public class BSMenu extends JMenuBar {
     JMenu menu = new JMenu("File");
+    JMenu game = new JMenu("Game");
+    JMenuItem newGame = new JMenuItem("New Game");
     JMenuItem save = new JMenuItem("Save");
     JMenuItem load = new JMenuItem("Load");
     JMenuItem qload = new JMenuItem("Load Last");
@@ -14,19 +16,22 @@ public class BSMenu extends JMenuBar {
     File selectedFile;
 
     public BSMenu(BSWindow window) {
+        menu.add(newGame);
+        menu.add(save);
         menu.add(load);
         menu.add(qload);
-        menu.add(save);
-        menu.add(records);
         this.add(menu);
+
+        game.add(records);
+        this.add(game);
 
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (window.game.isDeploy()) {
+                if (window.display.game.isDeploy()) {
                     JOptionPane.showMessageDialog(null, "All player must deploy ships before saving.", "Save Error", 0);
                 } else {
-                    window.game.saveToFile("save.txt");
+                    window.display.game.saveToFile("save.txt");
                 }
             }
         });
@@ -41,14 +46,14 @@ public class BSMenu extends JMenuBar {
                 if (result == JFileChooser.APPROVE_OPTION) {
                     window.display.setBlankDraw(true);
                     window.repaint();
-                    if (window.game.isDeploy()) {
-                        window.game.setDeploy(false);
+                    if (window.display.game.isDeploy()) {
+                        window.display.game.setDeploy(false);
                         window.display.setP1FirstFire(false);
-                        window.game.setShipsDeployed(window.game.getShipMax());
+                        window.display.game.setShipsDeployed(window.display.game.getShipMax());
                     }
                     selectedFile = fileChooser.getSelectedFile();
                     System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-                    window.game.initFromFile(selectedFile);
+                    window.display.game.initFromFile(selectedFile);
                     window.repaint();
                 } else {
                     JOptionPane.showMessageDialog(window, "No file selected.", "Error", 1);
@@ -59,19 +64,22 @@ public class BSMenu extends JMenuBar {
         qload.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                File fName = new File("save.txt");
-                if (fName.exists()) {
-                    window.display.setBlankDraw(true);
-                    window.repaint();
-                    if (window.game.isDeploy()) {
-                        window.game.setDeploy(false);
-                        window.display.setP1FirstFire(false);
-                        window.game.setShipsDeployed(window.game.getShipMax());
+                int choice = JOptionPane.showOptionDialog(null, "Are you sure you would like load a game?", "Records", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (choice == JOptionPane.YES_OPTION){
+                    File fName = new File("save.txt");
+                    if (fName.exists()) {
+                        window.display.setBlankDraw(true);
+                        window.repaint();
+                        if (window.display.game.isDeploy()) {
+                            window.display.game.setDeploy(false);
+                            window.display.setP1FirstFire(false);
+                            window.display.game.setShipsDeployed(window.display.game.getShipMax());
+                        }
+                        window.display.game.initFromFile(fName);
+                        window.repaint();
+                    } else {
+                        JOptionPane.showMessageDialog(window, "A previous save does not exist.", "Error", 0);
                     }
-                    window.game.initFromFile(fName);
-                    window.repaint();
-                } else {
-                    JOptionPane.showMessageDialog(window, "A previous save does not exist.", "Error", 0);
                 }
             }
         });
@@ -79,18 +87,16 @@ public class BSMenu extends JMenuBar {
         records.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent a) {
-                try {
-                    File records = new File("records.txt");
-                    Scanner scanner = new Scanner(records);
-                    String message = "High Scores\n";
-                    if (records.exists()) {
-                        while (scanner.hasNext()) {
-                            message += scanner.nextLine() + "\n";
-                        }
-                        JOptionPane.showMessageDialog(null, message, "Records", 1);
-                    }
-                } catch (Exception e) {
-                    System.err.println("Issue loading records");
+                window.display.showHighScores();
+            }
+        });
+
+        newGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                int choice = JOptionPane.showOptionDialog(null, "Are you sure you would like to restart?", "Records", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (choice == JOptionPane.YES_OPTION){
+                    window.display.newGame();
                 }
             }
         });

@@ -5,10 +5,9 @@ public class BSWindow extends JFrame {
 
     private int winWidth = 800;
     private int winHeight = 450;
-    BSDisplay display;
-    BSLogic game;
     int cellAcross = 10;
     int cellDown = 10;
+    BSDisplay display;
 
     BSMenu menuBar = new BSMenu(this);
 
@@ -18,8 +17,7 @@ public class BSWindow extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
 
-        game = new BSLogic(cellDown, cellAcross);
-        display = new BSDisplay(game);
+        display = new BSDisplay();
         this.add(display, BorderLayout.CENTER);
 
         this.setJMenuBar(menuBar);
