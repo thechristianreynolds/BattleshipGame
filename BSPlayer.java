@@ -129,51 +129,34 @@ public class BSPlayer {
     public void shipHit(int ship) {
         ships[ship] -= 1;
         if (ships[ship] == 0) {
-            MediaPlayer mediaPlayer = playSound(true);
-            mediaPlayer.play();
+            playSound();
             JOptionPane.showMessageDialog(null, "A ship has been sunk!", "Battleship Fire Phase", 1);
-            return;
+        } else {
+            playSound();
+            JOptionPane.showMessageDialog(null, "You hit something!", "Battleship Fire Phase", 1);
         }
-        MediaPlayer mediaPlayer = playSound(false);
-        mediaPlayer.play();
-        JOptionPane.showMessageDialog(null, "You hit something!", "Battleship Fire Phase", 1);
     }
 
-    public MediaPlayer playSound(boolean sink) {
+    public void playSound() {
         JFXPanel panel = new JFXPanel();
-        // Unique sounds for sinking a ship should be added
-        if (PlatformUtil.isMac()) {
-            if (sink) {
+        try{
+            if (PlatformUtil.isMac()) {
                 Random rand = new Random();
                 int randNum = rand.nextInt(4) + 1;
                 String bip = "Sounds/explosion" + randNum + ".mp3";
                 Media hit = new Media(new File(bip).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
-                return mediaPlayer;
-            } else {
-                Random rand = new Random();
-                int randNum = rand.nextInt(4) + 1;
-                String bip = "Sounds/explosion" + randNum + ".mp3";
-                Media hit = new Media(new File(bip).toURI().toString());
-                MediaPlayer mediaPlayer = new MediaPlayer(hit);
-                return mediaPlayer;
-            }
-        } else {
-            if (sink) {
-                Random rand = new Random();
-                int randNum = rand.nextInt(4) + 1;
-                String bip = "Sounds\\explosion" + randNum + ".mp3";
-                Media hit = new Media(new File(bip).toURI().toString());
-                MediaPlayer mediaPlayer = new MediaPlayer(hit);
-                return mediaPlayer;
+                mediaPlayer.play();
             } else {
                 Random rand = new Random();
                 int randNum = rand.nextInt(4) + 1;
                 String bip = "Sounds\\explosion" + randNum + ".mp3";
                 Media hit = new Media(new File(bip).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
-                return mediaPlayer;
+                mediaPlayer.play();
             }
+        } catch (Exception e){
+            System.err.println("Issue playing sound");
         }
     }
 
