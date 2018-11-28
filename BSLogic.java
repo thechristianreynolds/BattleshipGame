@@ -8,6 +8,7 @@ public class BSLogic {
     private int cols;
     private int shipMax = 5;
     private int shipsDeployed = 0;
+    private int HSListMax = 10;
     public BSPlayer player1;
     public BSPlayer player2;
     private boolean deployPhase;
@@ -32,19 +33,24 @@ public class BSLogic {
             newScore.add(name);
             newScore.add(score);
             scores.add(newScore);
-            int HSListMax = 10;
-            Scanner scanner = new Scanner(records);
-            for (int i = 0; i < HSListMax; i++) {
-                if (scanner.hasNext()) {
-                    ArrayList record = new ArrayList<>();
-                    String nextName = scanner.next();
-                    int nextScore = scanner.nextInt();
-                    record.add(nextName);
-                    record.add(nextScore);
-                    scores.add(record);
-                    System.err.println(nextName + " " + nextScore);
+            if (records.exists()) {
+                Scanner scanner = new Scanner(records);
+                for (int i = 0; i < HSListMax; i++) {
+                    if (scanner.hasNext()) {
+                        ArrayList record = new ArrayList<>();
+                        String nextName = scanner.next();
+                        int nextScore = scanner.nextInt();
+                        record.add(nextName);
+                        record.add(nextScore);
+                        scores.add(record);
+                        System.err.println(nextName + " " + nextScore);
+                    }
                 }
+                scanner.close();
+            } else {
+                System.err.println("Generating new records list.");
             }
+
             if (scores.size() > 1) {
                 scores = highScoreSort(scores);
             }
@@ -58,7 +64,6 @@ public class BSLogic {
                 int recordScore = (int) record.get(1);
                 writer.write(recordName + " " + recordScore + "\n");
             }
-            scanner.close();
             writer.close();
         } catch (Exception e) {
             System.err.println("Issue saving new high score.");
@@ -96,6 +101,7 @@ public class BSLogic {
             } else {
                 writer.write("0");
             }
+            writer.close();
         } catch (IOException e) {
             System.err.println("Problem saving the game.");
         }
@@ -115,6 +121,7 @@ public class BSLogic {
             p2Board = scan.useDelimiter("\n").next();
             p2Shots = Integer.parseInt(scan.useDelimiter("\n").next());
             playerTurn = scan.useDelimiter("\n").next();
+            scan.close();
         } catch (IOException e) {
             System.err.println("Problem loading from file.");
         }
