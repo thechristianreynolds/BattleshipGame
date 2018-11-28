@@ -1,7 +1,6 @@
 import java.util.*;
 import java.io.*;
 
-import com.sun.javafx.PlatformUtil;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -138,9 +137,10 @@ public class BSPlayer {
     }
 
     public void playSound() {
+        String os = System.getProperty("os.name");
         JFXPanel panel = new JFXPanel();
-        try {
-            if (PlatformUtil.isMac()) {
+        try{
+            if (os.toLowerCase().contains("Mac".toLowerCase())) {
                 Random rand = new Random();
                 int randNum = rand.nextInt(4) + 1;
                 String bip = "Sounds/explosion" + randNum + ".mp3";
@@ -155,7 +155,7 @@ public class BSPlayer {
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
                 mediaPlayer.play();
             }
-        } catch (Exception e) {
+        } catch (Exception e){
             System.err.println("Issue playing sound");
         }
     }
