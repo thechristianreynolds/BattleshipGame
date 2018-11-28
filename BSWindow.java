@@ -1,3 +1,9 @@
+/* 
+* Author: Austin Kibler, Samir Lamichhane, Christian Reynolds
+* Purpose: This is the main window containing the main program function
+* Date: 11/28/2018
+*/
+
 import java.awt.*;
 import javax.swing.*;
 

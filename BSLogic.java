@@ -1,3 +1,9 @@
+/* 
+* Author: Austin Kibler, Samir Lamichhane, Christian Reynolds
+* Purpose: This class holds the functions that determine the logic of the game as well as save and load functions
+* Date: 11/28/2018
+*/
+
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -146,7 +152,7 @@ public class BSLogic {
                 if (deploymentOnBoard(row, col, player1.getShipHP(), vert)) {
                     if (player1.deployShips(row, col, vert)) {
                         shipsDeployed = player1.getShipsDeployed() + player2.getShipsDeployed();
-                        System.err.println("Player one ship deployed at: " + row + ", " + col);
+                        System.err.println("Player 1 ship deployed at: " + row + ", " + col);
                     } else {
                         JOptionPane.showMessageDialog(null, "A ship is already there!", "Deployment Error", 0);
                     }
@@ -156,14 +162,14 @@ public class BSLogic {
             }
             if (shipsDeployed == shipMax) {
                 p1Turn = false;
-                System.err.println("Player two may deploy ships!");
+                System.err.println("Player 2 may deploy ships!");
             }
         } else {
             if (shipsDeployed < shipMax * 2) {
                 if (deploymentOnBoard(row, col, player2.getShipHP(), vert)) {
                     if (player2.deployShips(row, col, vert)) {
                         shipsDeployed = player1.getShipsDeployed() + player2.getShipsDeployed();
-                        System.err.println("Player one ship deployed at: " + row + ", " + col);
+                        System.err.println("Player 1 ship deployed at: " + row + ", " + col);
                     } else {
                         JOptionPane.showMessageDialog(null, "A ship is already there!", "Deployment Error", 0);
                     }

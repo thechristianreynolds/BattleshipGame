@@ -1,3 +1,8 @@
+/* 
+* Author: Austin Kibler, Samir Lamichhane, Christian Reynolds
+* Purpose: This class is the player containing the board and tracking the ships on each, also responsible for playing sounds
+* Date: 11/28/2018
+*/
 import java.util.*;
 import java.io.*;
 
@@ -156,6 +161,7 @@ public class BSPlayer {
                 String bip = "Sounds\\explosion" + randNum + ".mp3";
                 Media hit = new Media(new File(bip).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
+                mediaPlayer.setStartTime(new Duration(0));
                 mediaPlayer.play();
             }
         } catch (Exception e){

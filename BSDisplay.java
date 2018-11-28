@@ -1,3 +1,9 @@
+/* 
+* Author: Austin Kibler, Samir Lamichhane, Christian Reynolds
+* Purpose: The display class is responsible for displaying the game graphics also telling each player when it is their turn
+* Date: 11/28/2018
+*/
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

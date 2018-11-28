@@ -1,3 +1,9 @@
+/* 
+* Author: Austin Kibler, Samir Lamichhane, Christian Reynolds
+* Purpose: This class is responsible for the menu, containing the save and load buttons as well as highscores and new game
+* Date: 11/28/2018
+*/
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
