@@ -162,10 +162,10 @@ public class BSDisplay extends JPanel {
     public void showHighScores() {
         try {
             File records = new File("records.txt");
-            Scanner scanner = new Scanner(records);
             String message = "High Scores\n";
             if (!game.getGameOver()) {
                 if (records.exists()) {
+                    Scanner scanner = new Scanner(records);
                     while (scanner.hasNext()) {
                         message += scanner.nextLine() + "\n";
                     }
@@ -175,6 +175,7 @@ public class BSDisplay extends JPanel {
                 }
             } else {
                 if (records.exists()) {
+                    Scanner scanner = new Scanner(records);
                     while (scanner.hasNext()) {
                         message += scanner.nextLine() + "\n";
                     }
@@ -186,6 +187,8 @@ public class BSDisplay extends JPanel {
                     } else {
                         System.exit(0);
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Records not found.", "Records", 0);
                 }
             }
         } catch (Exception e) {

@@ -96,8 +96,8 @@ public class BSLogic {
             } else {
                 writer.write("0");
             }
-        } catch (IOException ex) {
-
+        } catch (IOException e) {
+            System.err.println("Problem saving the game.");
         }
     }
 
