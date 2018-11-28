@@ -64,8 +64,9 @@ public class BSMenu extends JMenuBar {
         qload.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int choice = JOptionPane.showOptionDialog(null, "Are you sure you would like load a game?", "Records", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                if (choice == JOptionPane.YES_OPTION){
+                int choice = JOptionPane.showOptionDialog(null, "Are you sure you would like load a game?", "Records",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (choice == JOptionPane.YES_OPTION) {
                     File fName = new File("save.txt");
                     if (fName.exists()) {
                         window.display.setBlankDraw(true);
@@ -94,8 +95,9 @@ public class BSMenu extends JMenuBar {
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent a) {
-                int choice = JOptionPane.showOptionDialog(null, "Are you sure you would like to restart?", "Records", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                if (choice == JOptionPane.YES_OPTION){
+                int choice = JOptionPane.showOptionDialog(null, "Are you sure you would like to restart?", "Records",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (choice == JOptionPane.YES_OPTION) {
                     window.display.newGame();
                 }
             }

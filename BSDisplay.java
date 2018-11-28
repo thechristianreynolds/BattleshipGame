@@ -60,7 +60,7 @@ public class BSDisplay extends JPanel {
         this.add(orientationPanel, BorderLayout.NORTH);
     }
 
-    public void newGame(){
+    public void newGame() {
         this.remove(scorePanel);
         this.blankDraw = false;
         this.p1FirstFire = true;
@@ -153,18 +153,18 @@ public class BSDisplay extends JPanel {
                 JOptionPane.showMessageDialog(null, "Player 1 may now fire!", "Battleship Deployment Phase", 1);
             }
         }
-        if (game.getGameOver()){
+        if (game.getGameOver()) {
             showHighScores();
         }
         repaint();
     }
 
-    public void showHighScores(){
+    public void showHighScores() {
         try {
             File records = new File("records.txt");
             Scanner scanner = new Scanner(records);
             String message = "High Scores\n";
-            if (!game.getGameOver()){
+            if (!game.getGameOver()) {
                 if (records.exists()) {
                     while (scanner.hasNext()) {
                         message += scanner.nextLine() + "\n";
@@ -179,8 +179,9 @@ public class BSDisplay extends JPanel {
                         message += scanner.nextLine() + "\n";
                     }
                     JOptionPane.showMessageDialog(null, message, "Records", 1);
-                    int choice = JOptionPane.showOptionDialog(null, "Would you like to play again?", "Records", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                    if (choice == JOptionPane.YES_OPTION){
+                    int choice = JOptionPane.showOptionDialog(null, "Would you like to play again?", "Records",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                    if (choice == JOptionPane.YES_OPTION) {
                         newGame();
                     } else {
                         System.exit(0);

@@ -139,7 +139,7 @@ public class BSPlayer {
 
     public void playSound() {
         JFXPanel panel = new JFXPanel();
-        try{
+        try {
             if (PlatformUtil.isMac()) {
                 Random rand = new Random();
                 int randNum = rand.nextInt(4) + 1;
@@ -155,7 +155,7 @@ public class BSPlayer {
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
                 mediaPlayer.play();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Issue playing sound");
         }
     }
