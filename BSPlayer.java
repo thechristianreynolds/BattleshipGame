@@ -4,6 +4,8 @@ import java.io.*;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+
 import javax.swing.*;
 
 /**
@@ -146,6 +148,7 @@ public class BSPlayer {
                 String bip = "Sounds/explosion" + randNum + ".mp3";
                 Media hit = new Media(new File(bip).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(hit);
+                mediaPlayer.setStartTime(new Duration(0));
                 mediaPlayer.play();
             } else {
                 Random rand = new Random();
