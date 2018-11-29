@@ -227,14 +227,26 @@ public class BSLogic {
     }
 
     public void fireRound(int row, int col) {
+        String name = "";
         if (p1Turn) {
             if (player2.checkHit(row, col)) {
                 if (checkWinner()) {
                     JOptionPane.showMessageDialog(null, "Player 2 may now fire!", "Battleship Deployment Phase", 1);
                     p1Turn = false;
                 } else {
-                    String name = JOptionPane.showInputDialog(null, "Enter your name", "Scoreboard", 1);
-                    saveHighScore(name, player1.getShotsTaken());
+                    boolean needName = true;
+                    while (needName) {
+                        try {
+                            name = JOptionPane.showInputDialog(null, "Enter your name", "Scoreboard", 1);
+                            if (!name.contains(" ") && !name.isEmpty()){
+                                needName = false;
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Please enter a name without a space.", "Record", 0);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Issue with entered name.");
+                        }
+                    }
                 }
             }
         } else {
@@ -243,7 +255,19 @@ public class BSLogic {
                     JOptionPane.showMessageDialog(null, "Player 1 may now fire!", "Battleship Deployment Phase", 1);
                     p1Turn = true;
                 } else {
-                    String name = JOptionPane.showInputDialog(null, "Enter your name", "Scoreboard", 1);
+                    boolean needName = true;
+                    while (needName) {
+                        try {
+                            name = JOptionPane.showInputDialog(null, "Enter your name", "Scoreboard", 1);
+                            if (!name.contains(" ") && !name.isEmpty()){
+                                needName = false;
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Please enter a name without a space.", "Record", 0);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Issue with entered name.");
+                        }
+                    }
                     saveHighScore(name, player2.getShotsTaken());
                 }
             }
